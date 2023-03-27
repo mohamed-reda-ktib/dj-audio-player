@@ -91,8 +91,8 @@ class MainPanel(wx.Panel):
         self.next_btn = wx.Button(self, wx.ID_ANY, _("Next item"))
         main_ctrl_GS.Add(self.next_btn, (1, 2), (1, 1), wx.ALIGN_CENTER | wx.ALL, 5)
 
-#monitor playback device controls with their design
-        def monitoring_playback_controls(self):
+    #monitor playback device controls with their design
+    def monitoring_playback_controls(self):
         """Monitoring playback device controls with their design.
         These controls are:
         -rewind button,
@@ -120,8 +120,8 @@ class MainPanel(wx.Panel):
         self.next_btn_copy = wx.Button(self, wx.ID_ANY, _("Next item"))
         monitoring_ctrl_GS.Add(self.next_btn_copy, (1, 2), (1, 1), wx.ALIGN_CENTER | wx.ALL, 5)
 
-#music list and short audios lists
-        def music_list(self):
+    #music list and short audios lists
+    def music_list(self):
         """Music list and short audios lists.
         This method contains the music list that includ all opened music
         and another list including all opend short audios
@@ -145,7 +145,7 @@ class MainPanel(wx.Panel):
         aud_list_GS.AddGrowableCol(1)
         
         #set the final layout
-        self.SetSizer(main_HS)
+        self.SetSizer(self.main_HS)
         self.Layout()
 
 
@@ -174,13 +174,13 @@ class DJAudioPlayer(wx.Frame):
         self.Centre()
 
 
-        # Menu Bar
-        def menu_bar(self):
+    # Menu Bar
+    def menu_bar(self):
         # Menu Bar
         self.menu_bar = wx.MenuBar()
         open_menu = wx.Menu()
         open = open_menu.Append(wx.ID_ANY, _("Open music"), "")
-        self.Bind(wx.EVT_MENU, self.wx, item)
+        #self.Bind(wx.EVT_MENU, self.wx, item)
         self.menu_bar.Append(open_menu, _("Open"))
         self.SetMenuBar(self.menu_bar)
 
