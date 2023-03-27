@@ -14,6 +14,7 @@ import gettext
 
 #local modules import
 from menu_bar import MenuBar
+from audio import AudioPlayer
 
 
 #the main panel of the app
