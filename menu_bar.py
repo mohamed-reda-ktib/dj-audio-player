@@ -1,5 +1,6 @@
 #stander libraries import
 import wx
+import os
 
 
 #the menu bar class
@@ -8,14 +9,16 @@ class MenuBar(wx.MenuBar):
     It contains all menu bar widgets and methods related to them.
     """
     #constructor
-    def __init__(self, music_list, audio_list):
+    def __init__(self, parent, music_list, audio_list):
         """The constructor of the class.
         It initializes the class and calls all necessary methods to add the menu bar to the frame.
-        This method has 2 parameters:
+        This method has 3 parameters:
+        -parent: the top level class,
         -music_list: a widget of a wx list where the music tracks will be made,
         -and audio_list: a widget of a wx list where the short audio tracks will be made.
         """
         super().__init__()
+        self.parent = parent
         self.music_list = music_list
         self.audio_list = audio_list
         #calling methods
@@ -46,10 +49,23 @@ class MenuBar(wx.MenuBar):
         """Open music to be played.
         This method opens one or more music tracks and makes them in the music list.
         """
-        pass
-
+        #supported file extentions
+        wildcard = "Music Files (*.mp3 *.wav)|*.mp3;*.wav|Mp3 Files (*.mp3)|*.mp3| wav files (*.wav)|*.wav"
+        #display the dialog
+        dialog = wx.FileDialog(self.parent, _("Choose files"), wildcard=wildcard,
+                               style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST | wx.FD_MULTIPLE)
+        if dialog.ShowModal() == wx.ID_CANCEL:
+            return
+        #show the file names in the ListBox
+        paths = dialog.GetPaths()
+        for path in paths:
+            basename = os.path.basename(path)
+            self.music_list.Append(basename)
+        dialog.Destroy()
+        
     #open short audios to be played
     def open_short_audios(self, e):
+        """Open one or more  short audio files and display their names in the ListBox."""
         pass
 
     #exit the program

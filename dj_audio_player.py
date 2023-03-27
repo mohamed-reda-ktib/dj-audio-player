@@ -176,7 +176,7 @@ class DJAudioPlayer(wx.Frame):
         #adding the main panel to the frame
         self.main_pnl = MainPanel(self, wx.ID_ANY)
         #adding menu bar
-        menubar = MenuBar(self.main_pnl.music_list, self.main_pnl.audio_list)
+        menubar = MenuBar(self, self.main_pnl.music_list, self.main_pnl.audio_list)
         self.SetMenuBar(menubar)
         #setting the layout
         self.Layout()
