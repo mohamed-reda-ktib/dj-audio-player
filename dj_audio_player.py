@@ -6,10 +6,6 @@
 
 #standers modules import
 import wx
-import sounddevice as sd
-import soundfile as sf
-import time
-from threading import Thread
 import gettext
 
 #local modules import
@@ -24,6 +20,8 @@ class MainPanel(wx.Panel):
     It contains also the logic to make thiese widgets do its job.
     These widgets are: info widgets, main playback controls, monitoring playback controls and music list and short audios list.
     """
+    #a variable to now if there is any playing music track or not yet
+    music_playing = False
     #class constructor
     def __init__(self, *args, **kwds):
         """The class constructor.
@@ -98,6 +96,14 @@ class MainPanel(wx.Panel):
         main_ctrl_GS.Add(self.stop_btn, (1, 1), (1, 1), wx.ALIGN_CENTER | wx.ALL, 5)
         self.next_btn = wx.Button(self, wx.ID_ANY, _("Next item"))
         main_ctrl_GS.Add(self.next_btn, (1, 2), (1, 1), wx.ALIGN_CENTER | wx.ALL, 5)
+        
+        #binding buttons to their methods
+        self.rewind_btn.Bind(wx.EVT_BUTTON, self.rewind_music_main)
+        self.pause_btn.Bind(wx.EVT_TOGGLEBUTTON, self.play_pause_music_main)
+        self.fast_btn.Bind(wx.EVT_BUTTON, self.fast_forward_music_main)
+        self.previous_btn.Bind(wx.EVT_BUTTON, self.previous_music_main)
+        self.stop_btn.Bind(wx.EVT_TOGGLEBUTTON, self.play_stop_music_main)
+        self.next_btn.Bind(wx.EVT_BUTTON, self.next_music_main)
 
     #monitor playback device controls with their design
     def monitoring_playback_controls(self):
@@ -127,6 +133,14 @@ class MainPanel(wx.Panel):
         monitoring_ctrl_GS.Add(self.stop_btn_copy, (1, 1), (1, 1), wx.ALIGN_CENTER | wx.ALL, 5)
         self.next_btn_copy = wx.Button(self, wx.ID_ANY, _("Next item"))
         monitoring_ctrl_GS.Add(self.next_btn_copy, (1, 2), (1, 1), wx.ALIGN_CENTER | wx.ALL, 5)
+        
+        #binding buttons to their methods
+        self.rewind_btn_copy.Bind(wx.EVT_BUTTON, self.rewind_music_monitoring)
+        self.pause_btn_copy.Bind(wx.EVT_TOGGLEBUTTON, self.play_pause_music_monitoring)
+        self.fast_btn_copy.Bind(wx.EVT_BUTTON, self.fast_forward_music_monitoring)
+        self.previous_btn_copy.Bind(wx.EVT_BUTTON, self.previous_music_monitoring)
+        self.stop_btn_copy.Bind(wx.EVT_TOGGLEBUTTON, self.play_stop_music_monitoring)
+        self.next_btn_copy.Bind(wx.EVT_BUTTON, self.next_music_monitoring)
 
     #music list and short audios lists
     def add_music_list(self):
@@ -153,6 +167,86 @@ class MainPanel(wx.Panel):
         #set the final layout
         self.SetSizer(self.main_HS)
         self.Layout()
+    
+    #rewind the main music track back 
+    def rewind_music_main(self, e):
+        """Rewind the main music track back.
+        This method will be invoked when the rewind button is clicked.
+        It rewind the music track back by the number specified of seconds.
+        It rewind back the playing track on the main playback device.
+        It call the rewind method from the AudioPlayerClass that has one argument:
+        -seconds: it specifies the number of seconds to be rewinded back.
+        """
+        pass
+
+    #play or pause the current music track
+    def play_pause_music_main(self, e):
+        """Play or pause the current music track.
+        This method played or pause the current music track on the main playback device.
+        It initializes the AudioPlayer class and calls the play method from the AudioPlayer class.
+        The AudioPlayer class has 2 arguments:
+        -file_path: the path of the music file to be played,
+        -and device (optional, set to Non): specify the device where the music file will be played.
+        """
+        if self.pause_btn.GetValue():
+            if not self.music_playing:
+                self.main_device_playback = AudioPlayer('1.wav', 3)
+                self.music_playing = True
+            self.main_device_playback.play()
+            self.stop_btn.SetValue(True)
+        else:
+            self.main_device_playback.pause()
+            self.stop_btn.SetValue(False)
+
+    #Fast forwards the music playback by the specified number of seconds
+    def fast_forward_music_main(self, e):
+        """Fast forwards the music playback by the specified number of seconds.
+        This method fast forwards the main music playback by the specified number of seconds.
+        """
+        pass
+    
+    #previous music track
+    def previous_music_main(self, e):
+        """Plays the previous audio track in the audio player's playlist  for the main playback device.
+        """
+        pass
+    
+    #Play or stop the current music track
+    def play_stop_music_main(self, e):
+        """Play or stop the current music track.
+        This method played or pause the current music track on the main playback device.
+        It initializes the AudioPlayer class and calls the play method from the AudioPlayer class.
+        The AudioPlayer class has 2 arguments:
+        -file_path: the path of the music file to be played,
+        -and device (optional, set to Non): specify the device where the music file will be played.
+        """
+        if self.stop_btn.GetValue():
+            if self.music_playing == False:
+                self.main_device_playback = AudioPlayer('1.wav', 3)
+                self.music_playing = True
+            self.main_device_playback.play()
+            self.pause_btn.SetValue(True)
+        else:
+            self.main_device_playback.stop()
+            self.pause_btn.SetValue(Fals)
+    
+    #Plays the next audio track
+    def next_music_main(self, e):
+        """Plays the next audio track in the audio player's playlist for the main playback device.
+        """
+        pass
+    def rewind_music_monitoring(self, e):
+        pass
+    def play_pause_music_monitoring(self, e):
+        pass
+    def fast_forward_music_monitoring(self, e):
+        pass
+    def previous_music_monitoring(self, e):
+        pass
+    def play_stop_music_monitoring(self, e):
+        pass
+    def next_music_monitoring(self, e):
+        pass
 
 
 #main frame app class
