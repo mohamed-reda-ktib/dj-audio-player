@@ -22,6 +22,8 @@ class MainPanel(wx.Panel):
     """
     #a variable to now if there is any playing music track or not yet
     music_playing = False
+    #the paths list
+    paths = []
     #class constructor
     def __init__(self, *args, **kwds):
         """The class constructor.
@@ -188,15 +190,27 @@ class MainPanel(wx.Panel):
         -file_path: the path of the music file to be played,
         -and device (optional, set to Non): specify the device where the music file will be played.
         """
-        if self.pause_btn.GetValue():
-            if not self.music_playing:
-                self.main_device_playback = AudioPlayer('1.wav', 3)
-                self.music_playing = True
-            self.main_device_playback.play()
-            self.stop_btn.SetValue(True)
-        else:
-            self.main_device_playback.pause()
-            self.stop_btn.SetValue(False)
+        # Check if there are no errors, esspecially no selected music track
+        try:
+            # When the play button is toggled to true
+            if self.pause_btn.GetValue():
+                # Initialize a new audio player object if there is none
+                if not self.music_playing:
+                    file_path = self.paths[self.audio_list.GetSelection()]
+                    self.main_device_playback = AudioPlayer(file_path, 3)
+                    self.music_playing = True
+                # Play the audio track
+                self.main_device_playback.play()
+                self.stop_btn.SetValue(True)
+            # When the play button is toggled to false
+            else:
+                    # Pause the audio track
+                    self.main_device_playback.pause()
+                    self.stop_btn.SetValue(False)
+        # If there are any errors, display a message box
+        except:
+            wx.MessageBox(_("Please select a music track."), _("Error"), wx.OK | wx.ICON_ERROR)
+            self.pause_btn.SetValue(False)
 
     #Fast forwards the music playback by the specified number of seconds
     def fast_forward_music_main(self, e):
@@ -220,15 +234,27 @@ class MainPanel(wx.Panel):
         -file_path: the path of the music file to be played,
         -and device (optional, set to Non): specify the device where the music file will be played.
         """
-        if self.stop_btn.GetValue():
-            if self.music_playing == False:
-                self.main_device_playback = AudioPlayer('1.wav', 3)
-                self.music_playing = True
-            self.main_device_playback.play()
-            self.pause_btn.SetValue(True)
-        else:
-            self.main_device_playback.stop()
-            self.pause_btn.SetValue(Fals)
+        # Check if there are no errors, esspecially no selected music track
+        try:
+            # When the play button is toggled to true
+            if self.stop_btn.GetValue():
+                # Initialize a new audio player object if there is none
+                if not self.music_playing:
+                    file_path = self.paths[self.audio_list.GetSelection()]
+                    self.main_device_playback = AudioPlayer(file_path, 3)
+                    self.music_playing = True
+                # Play the audio track
+                self.main_device_playback.play()
+                self.pause_btn.SetValue(True)
+            # When the play button is toggled to false
+            else:
+                    # stop the audio track
+                    self.main_device_playback.stop()
+                    self.pause_btn.SetValue(False)
+        # If there are any errors, display a message box
+        except:
+            wx.MessageBox(_("Please select a music track."), _("Error"), wx.OK | wx.ICON_ERROR)
+            self.stop_btn.SetValue(False)
     
     #Plays the next audio track
     def next_music_main(self, e):
@@ -268,7 +294,7 @@ class DJAudioPlayer(wx.Frame):
         #adding the main panel to the frame
         self.main_pnl = MainPanel(self, wx.ID_ANY)
         #adding menu bar
-        menubar = MenuBar(self, self.main_pnl.music_list, self.main_pnl.audio_list)
+        menubar = MenuBar(self, self.main_pnl.music_list, self.main_pnl.audio_list, self.main_pnl.paths)
         self.SetMenuBar(menubar)
         #setting the layout
         self.Layout()
